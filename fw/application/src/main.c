@@ -5,7 +5,6 @@
 #include "nrf_log.h"
 #include "nrf_delay.h"
 #include "ntag_emu.h"
-#include "nfc_board.h"
 
 // Function to initialize NTAG from cached data
 static void initialize_ntag_from_cache(void) {
