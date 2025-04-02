@@ -1,26 +1,25 @@
 /*
- * ntag_def.h
- *
- *  Created on: 2021年9月1日
- *      Author: solos
+ * ntag_def.h - Definitions for NTAG emulation
  */
 
-#ifndef NTAG_DEF_H_
-#define NTAG_DEF_H_
+#ifndef NTAG_DEF_H
+#define NTAG_DEF_H
 
-#include <stdbool.h>
 #include <stdint.h>
 
-#define NTAG_DATA_SIZE 540
-#define NTAG_TAGMO_DATA_SIZE 532
-#define NTAG_THENAYA_DATA_SIZE 572
+// NTAG event types
+typedef enum {
+    NTAG_EVENT_TYPE_NONE = 0,
+    NTAG_EVENT_TYPE_READ,
+    NTAG_EVENT_TYPE_UPDATE
+} ntag_event_type_t;
 
-typedef enum { NTAG_213, NTAG_215, NTAG_216 } ntag_type_t;
-
+// NTAG structure (basic representation)
 typedef struct {
-    uint8_t data[NTAG_DATA_SIZE];
-    uint8_t notes[128];
-    bool read_only;
+    uint8_t data[540];  // Typical NTAG215 size (504 bytes), extended for safety
 } ntag_t;
 
-#endif /* NTAG_DEF_H_ */
+// Callback type for NTAG emulation updates
+typedef void (*ntag_update_cb_t)(ntag_event_type_t event, void* context, const ntag_t* tag);
+
+#endif // NTAG_DEF_H
