@@ -62,6 +62,11 @@ void ntag_store_get_uuid(ntag_t *ntag, uint8_t *uuid) {
     memcpy(uuid, ntag->data, 7);
 }
 
+// Alias to support expected external function
+ret_code_t ntag_store_new_rand(ntag_t *ntag) {
+    return ntag_store_uuid_rand(ntag);
+}
+
 // STUB: Set UUID into tag
 void ntag_store_set_uuid(ntag_t *ntag, uint8_t *uuid) {
     if (ntag && uuid) {
