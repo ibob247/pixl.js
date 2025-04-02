@@ -4,7 +4,6 @@
 
 #include "ntag_store.h"
 #include "ntag_emu.h"
-#include "emulator_settings.h"
 #include "ff.h"
 #include "nrf_log.h"
 #include <string.h>
