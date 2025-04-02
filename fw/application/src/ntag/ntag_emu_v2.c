@@ -64,7 +64,7 @@ void ntag_emu_tick(void) {
     if (ntag_emu.dirty && !ntag_emu.busy && ntag_emu.update_cb) {
         ntag_emu.dirty = 0;
         ntag_emu.busy = 1;
-        ntag_emu.update_cb(NTAG_EVENT_UPDATE, ntag_emu.cb_context);
+        ntag_emu.update_cb(NTAG_EVENT_TYPE_UPDATE, ntag_emu.cb_context);
         ntag_emu.busy = 0;
     }
 }
