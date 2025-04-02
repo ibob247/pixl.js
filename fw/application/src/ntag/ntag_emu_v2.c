@@ -1,5 +1,5 @@
 /*
- * ntag_emu_v2.c (Full version with Skylanders Chameleon Mode support)
+ * ntag_emu_v2.c (Full version with corrected function signatures and Skylanders Chameleon Mode support)
  */
 
 #include "ntag_emu.h"
@@ -50,9 +50,13 @@ void ntag_emu_mark_dirty(void) {
     ntag_emu.dirty = 1;
 }
 
-void ntag_emu_init(void) {
+ret_code_t ntag_emu_init(const ntag_t* tag) {
+    if (tag != NULL) {
+        memcpy(&ntag_emu.ntag, tag, sizeof(ntag_t));
+    }
     nfc_platform_setup();
     NRF_LOG_INFO("NTAG emulation initialized");
+    return 0; // NRF_SUCCESS
 }
 
 void ntag_emu_tick(void) {
@@ -60,7 +64,7 @@ void ntag_emu_tick(void) {
     if (ntag_emu.dirty && !ntag_emu.busy && ntag_emu.update_cb) {
         ntag_emu.dirty = 0;
         ntag_emu.busy = 1;
-        ntag_emu.update_cb(&ntag_emu.ntag, ntag_emu.cb_context);
+        ntag_emu.update_cb(NTAG_EVENT_UPDATE, ntag_emu.cb_context);
         ntag_emu.busy = 0;
     }
 }
