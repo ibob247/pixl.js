@@ -60,13 +60,8 @@ ret_code_t ntag_emu_init(const ntag_t* tag) {
 }
 
 void ntag_emu_tick(void) {
-    // Placeholder for time-based updates or watchdog, if needed
-    if (ntag_emu.dirty && !ntag_emu.busy && ntag_emu.update_cb) {
-        ntag_emu.dirty = 0;
-        ntag_emu.busy = 1;
-        ntag_emu.update_cb(NTAG_EVENT_TYPE_UPDATE, ntag_emu.cb_context);
-        ntag_emu.busy = 0;
-    }
+    // No-op for now – callback mechanism is not needed
+}
 }
 
 // Skylanders-specific Custom Mode Init
