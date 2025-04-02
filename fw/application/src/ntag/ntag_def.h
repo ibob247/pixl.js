@@ -1,31 +1,29 @@
-#ifndef NTAG_DEF_H
-#define NTAG_DEF_H
+#ifndef NTAG_EMU_H
+#define NTAG_EMU_H
 
-#include <stdint.h>
+#include "ntag_def.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// NTAG structure definition
-typedef struct {
-    uint8_t data[1024];  // Full 1KB MIFARE Classic tag data
-} ntag_t;
+// Initializes the NTAG emulator with a tag
+ret_code_t ntag_emu_init(const ntag_t* tag);
 
-// Event types for NTAG updates
-typedef enum {
-    NTAG_EVENT_TYPE_READ,
-    NTAG_EVENT_TYPE_UPDATE
-} ntag_event_type_t;
+// Sets the current tag for emulation
+void ntag_emu_set_tag(const ntag_t* tag);
 
-// Callback type for NTAG updates
-typedef void (*ntag_update_cb_t)(ntag_event_type_t event, void* context, const ntag_t* tag);
+// Sets the UUID of the current tag only
+void ntag_emu_set_uuid_only(const ntag_t* tag);
 
-// Public interface to get current tag
+// Gets the current tag being emulated
 const ntag_t* ntag_emu_get_current_tag(void);
+
+// Sets a callback for when the tag changes
+void ntag_emu_set_callback(ntag_update_cb_t callback, void* context);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // NTAG_DEF_H
+#endif // NTAG_EMU_H
