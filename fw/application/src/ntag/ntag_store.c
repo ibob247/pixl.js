@@ -5,7 +5,9 @@
 #include "ntag_store.h"
 #include "ntag_emu.h"
 #include "nrf_log.h"
+#include "ntag_def.h"
 #include <string.h>
+#include <stdlib.h>
 
 static ntag_update_cb_t emu_callback = NULL;
 static void* emu_context = NULL;
@@ -21,14 +23,14 @@ const ntag_t* ntag_emu_get_current_tag(void) {
 void ntag_emu_set_tag(const ntag_t* tag) {
     if (tag) {
         memcpy(&current_tag, tag, sizeof(ntag_t));
-        if (emu_callback) emu_callback(NTAG_EVENT_TYPE_UPDATE, emu_context);
+        if (emu_callback) emu_callback(NTAG_EVENT_TYPE_UPDATE, emu_context, &current_tag);
     }
 }
 
 void ntag_emu_set_uuid_only(const ntag_t* tag) {
     if (tag) {
         memcpy(current_tag.data, tag->data, 7);
-        if (emu_callback) emu_callback(NTAG_EVENT_TYPE_UPDATE, emu_context);
+        if (emu_callback) emu_callback(NTAG_EVENT_TYPE_UPDATE, emu_context, &current_tag);
     }
 }
 
@@ -44,7 +46,7 @@ void ntag_emu_set_uuid_only(const ntag_t* tag) {
 //
 //     if (bytes_read != sizeof(current_tag.data)) return false;
 //
-//     if (emu_callback) emu_callback(NTAG_EVENT_TYPE_UPDATE, emu_context);
+//     if (emu_callback) emu_callback(NTAG_EVENT_TYPE_UPDATE, emu_context, &current_tag);
 //
 //     if (emu_callback) {
 //         uint8_t* uid = &current_tag.data[0];
