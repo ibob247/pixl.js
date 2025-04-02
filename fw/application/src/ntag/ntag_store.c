@@ -82,3 +82,26 @@ void ntag_emu_set_tag(const ntag_t* tag) {
 ntag_t* ntag_emu_get_current_tag() {
     return &current_ntag;
 }
+
+
+// --- Additional stubs for Amiibo/Amiibolink compatibility ---
+
+// Placeholder for setting only the UUID
+void ntag_emu_set_uuid_only(const uint8_t* uuid) {
+    if (uuid) {
+        memcpy(current_ntag.data, uuid, 7);
+    }
+}
+
+// Wrapper for generating a random UUID
+void ntag_store_uuid_rand(uint8_t* uuid) {
+    static uint8_t fallback_uid[7] = {0x04, 0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6};
+    memcpy(uuid, fallback_uid, 7);
+}
+
+// Wrapper for setting a UUID directly
+void ntag_store_set_uuid(ntag_t* tag, const uint8_t* uuid) {
+    if (tag && uuid) {
+        memcpy(tag->data, uuid, 7);
+    }
+}
