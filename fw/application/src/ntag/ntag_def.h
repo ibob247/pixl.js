@@ -1,25 +1,26 @@
 /*
- * ntag_def.h - Definitions for NTAG emulation
+ * ntag_emu.h - Header for NTAG emulation handling
  */
 
-#ifndef NTAG_DEF_H
-#define NTAG_DEF_H
+#ifndef NTAG_EMU_H
+#define NTAG_EMU_H
 
-#include <stdint.h>
+#include "ntag_def.h"  // Provides ntag_event_type_t, ntag_t, and ntag_update_cb_t
 
-// NTAG event types
-typedef enum {
-    NTAG_EVENT_TYPE_NONE = 0,
-    NTAG_EVENT_TYPE_READ,
-    NTAG_EVENT_TYPE_UPDATE
-} ntag_event_type_t;
+#include "nfc_emulator_api.h"  // If needed for NFC hardware abstraction
 
-// NTAG structure (basic representation)
-typedef struct {
-    uint8_t data[540];  // Typical NTAG215 size (504 bytes), extended for safety
-} ntag_t;
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-// Callback type for NTAG emulation updates
-typedef void (*ntag_update_cb_t)(ntag_event_type_t event, void* context, const ntag_t* tag);
+ret_code_t ntag_emu_init(const ntag_t* tag);
+void ntag_emu_set_tag(const ntag_t* tag);
+void ntag_emu_set_uuid_only(const ntag_t* tag);
+void ntag_emu_set_update_cb(ntag_update_cb_t cb, void* context);
+ntag_t* ntag_emu_get_current_tag(void);
 
-#endif // NTAG_DEF_H
+#ifdef __cplusplus
+}
+#endif
+
+#endif // NTAG_EMU_H
