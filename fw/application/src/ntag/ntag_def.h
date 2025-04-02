@@ -1,36 +1,25 @@
 /*
- * ntag_emu.h - Interface for NTAG emulation functions
+ * ntag_def.h - Definitions for NTAG emulation
  */
 
-#ifndef NTAG_EMU_H
-#define NTAG_EMU_H
-
-#include "ntag_def.h"  // Central type definitions
+#ifndef NTAG_DEF_H
+#define NTAG_DEF_H
 
 #include <stdint.h>
-#include "sdk_errors.h"  // For ret_code_t
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+// NTAG event types
+typedef enum {
+    NTAG_EVENT_TYPE_NONE = 0,
+    NTAG_EVENT_TYPE_READ,
+    NTAG_EVENT_TYPE_UPDATE
+} ntag_event_type_t;
 
-// Initialize the NTAG emulation with the given tag
-ret_code_t ntag_emu_init(const ntag_t* tag);
+// NTAG structure (basic representation)
+typedef struct {
+    uint8_t data[540];  // Typical NTAG215 size (504 bytes), extended for safety
+} ntag_t;
 
-// Set a new tag for emulation
-void ntag_emu_set_tag(const ntag_t* tag);
+// Callback type for NTAG emulation updates
+typedef void (*ntag_update_cb_t)(ntag_event_type_t event, void* context, const ntag_t* tag);
 
-// Set only the UUID for a tag (without affecting full data)
-void ntag_emu_set_uuid_only(const ntag_t* tag);
-
-// Get the currently emulated tag (non-const for mutation by store)
-ntag_t* ntag_emu_get_current_tag(void);
-
-// Set a callback to notify on tag update events
-void ntag_emu_set_update_cb(ntag_update_cb_t cb, void* context);
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif // NTAG_EMU_H
+#endif // NTAG_DEF_H
