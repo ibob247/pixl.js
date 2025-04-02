@@ -59,21 +59,3 @@ void ntag_store_new_rand(ntag_t *ntag) {
 void ntag_store_get_uuid(ntag_t *ntag, uint8_t *uuid) {
     memcpy(uuid, ntag->data, 7);
 }
-
-
-// --- Required ntag_emu.h stubs for build compatibility ---
-static ntag_update_cb_t emu_callback = NULL;
-static void* emu_context = NULL;
-
-void ntag_emu_set_update_cb(ntag_update_cb_t cb, void* context) {
-    emu_callback = cb;
-    emu_context = context;
-}
-
-void ntag_emu_set_tag(const ntag_t* tag) {
-    if (tag) memcpy(&current_ntag, tag, sizeof(ntag_t));
-}
-
-ntag_t* ntag_emu_get_current_tag() {
-    return &current_ntag;
-}
