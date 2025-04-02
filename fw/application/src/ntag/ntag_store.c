@@ -9,7 +9,28 @@
 
 static ntag_update_cb_t emu_callback = NULL;
 static void* emu_context = NULL;
-static ntag_t current_tag;
+ntag_t current_tag;
+ntag_t default_ntag215 = {
+    .data = { 0x04, 0xA2, 0xB3, 0xC4, 0xD5, 0xE6, 0xF7 }
+};
+
+const ntag_t* ntag_emu_get_current_tag(void) {
+    return &current_tag;
+}
+
+void ntag_emu_set_tag(const ntag_t* tag) {
+    if (tag) {
+        memcpy(&current_tag, tag, sizeof(ntag_t));
+        if (emu_callback) emu_callback(NTAG_EVENT_TYPE_UPDATE, emu_context);
+    }
+}
+
+void ntag_emu_set_uuid_only(const ntag_t* tag) {
+    if (tag) {
+        memcpy(current_tag.data, tag->data, 7);
+        if (emu_callback) emu_callback(NTAG_EVENT_TYPE_UPDATE, emu_context);
+    }
+}
 
 // Temporarily removed to avoid ff.h dependency
 // bool ntag_store_load_from_dump(const char* path) {
