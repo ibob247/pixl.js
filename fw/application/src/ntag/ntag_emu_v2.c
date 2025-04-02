@@ -62,7 +62,6 @@ ret_code_t ntag_emu_init(const ntag_t* tag) {
 void ntag_emu_tick(void) {
     // No-op for now – callback mechanism is not needed
 }
-}
 
 // Skylanders-specific Custom Mode Init
 void ntag_emu_init_custom_mode(void) {
