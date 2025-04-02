@@ -5,9 +5,7 @@
 #ifndef NTAG_EMU_H
 #define NTAG_EMU_H
 
-#include "ntag_def.h"  // Provides ntag_event_type_t, ntag_t, and ntag_update_cb_t
-
-#include "nfc_emulator_api.h"  // If needed for NFC hardware abstraction
+#include "ntag_def.h"
 
 #ifdef __cplusplus
 extern "C" {
