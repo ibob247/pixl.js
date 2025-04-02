@@ -1,10 +1,14 @@
+/*
+ * ntag_store.h - Header for Skylanders Chameleon Mode
+ */
+
 #ifndef NTAG_STORE_H
 #define NTAG_STORE_H
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "ntag.h"
-#include "nrf_error.h" // For ret_code_t
+#include "ntag_def.h"
+#include "nrf_error.h"
 
 bool ntag_store_load_from_dump(const char* path);
 ret_code_t ntag_store_uuid_rand(ntag_t *ntag);
