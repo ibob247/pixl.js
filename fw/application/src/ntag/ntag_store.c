@@ -8,6 +8,7 @@
 #include "nrf_log.h"
 #include "utils2.h"
 #include "vfs.h"
+#include "ntag_emu.h"
 
 ntag_t current_ntag;
 
@@ -49,10 +50,11 @@ bool ntag_store_load_from_dump(const char* path) {
     return true;
 }
 
-// STUB: Generate a random UUID (placeholder - real RNG should be used)
-void ntag_store_new_rand(ntag_t *ntag) {
-    static uint8_t fallback_uid[7] = {0x04, 0xFA, 0xCE, 0xBA, 0xBE, 0x00, 0x01};
+// STUB: Generate a random UID for the tag
+ret_code_t ntag_store_uuid_rand(ntag_t *ntag) {
+    static uint8_t fallback_uid[7] = {0x04, 0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6};
     memcpy(ntag->data, fallback_uid, 7);
+    return 0; // NRF_SUCCESS
 }
 
 // STUB: Copy UUID from ntag data
@@ -60,12 +62,14 @@ void ntag_store_get_uuid(ntag_t *ntag, uint8_t *uuid) {
     memcpy(uuid, ntag->data, 7);
 }
 
-
-
-
+// STUB: Set UUID into tag
+void ntag_store_set_uuid(ntag_t *ntag, uint8_t *uuid) {
+    if (ntag && uuid) {
+        memcpy(ntag->data, uuid, 7);
+    }
+}
 
 // --- Required ntag_emu.h stubs for build compatibility ---
-#include "ntag_emu.h"
 
 static ntag_update_cb_t emu_callback = NULL;
 static void* emu_context = NULL;
@@ -83,25 +87,9 @@ ntag_t* ntag_emu_get_current_tag() {
     return &current_ntag;
 }
 
-
-// --- Additional stubs for Amiibo/Amiibolink compatibility ---
-
 // Placeholder for setting only the UUID
-void ntag_emu_set_uuid_only(const uint8_t* uuid) {
-    if (uuid) {
-        memcpy(current_ntag.data, uuid, 7);
-    }
-}
-
-// Wrapper for generating a random UUID
-void ntag_store_uuid_rand(uint8_t* uuid) {
-    static uint8_t fallback_uid[7] = {0x04, 0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6};
-    memcpy(uuid, fallback_uid, 7);
-}
-
-// Wrapper for setting a UUID directly
-void ntag_store_set_uuid(ntag_t* tag, const uint8_t* uuid) {
-    if (tag && uuid) {
-        memcpy(tag->data, uuid, 7);
+void ntag_emu_set_uuid_only(const ntag_t* ntag) {
+    if (ntag) {
+        memcpy(current_ntag.data, ntag->data, 7);
     }
 }
