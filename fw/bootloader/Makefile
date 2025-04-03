@@ -55,4 +55,4 @@ INC_PATHS += -I$(PROJ_DIR)
 CFLAGS += -DBOARD_$(BOARD)
 
 # Use relative path to Makefile.common
-include ../../components/toolchain/gcc/Makefile.common
+include ../components/toolchain/gcc/Makefile.common
