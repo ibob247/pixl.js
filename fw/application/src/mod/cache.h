@@ -1,22 +1,21 @@
-#ifndef CACHE_H_
-#define CACHE_H_
+// cache.h
+#ifndef CACHE_H
+#define CACHE_H
 
 #include "ntag_def.h"
-#include "vfs.h"
 
-#define CACHEDATASIZE 312
-#define CACHE_MAGIC 0x564D5649
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct {
-    int32_t enabled;
-    uint32_t id;
     ntag_t ntag;
-    uint8_t retain_data[CACHEDATASIZE];
-} cache_data_t;
+} mod_cache_t;
 
-int32_t cache_clean();
-int32_t cache_save();
-cache_data_t *cache_get_data();
-bool cache_valid();
+mod_cache_t* mod_cache_get_data(void);
 
-#endif /* CACHE_H_ */
+#ifdef __cplusplus
+}
+#endif
+
+#endif // CACHE_H
