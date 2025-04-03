@@ -3,6 +3,8 @@
 #define CACHE_H
 
 #include "ntag_def.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,6 +12,9 @@ extern "C" {
 
 typedef struct {
     ntag_t ntag;
+    int id;
+    bool enabled;
+    uint8_t retain_data[64]; // Placeholder size; adjust as needed
 } mod_cache_t;
 
 mod_cache_t* mod_cache_get_data(void);
