@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "mini_app_registry.h"  // Required for mini_app_t
-#include "view.h"
+#include "mini_app_registry.h"
+#include "view/view.h"  // <-- Corrected path to view.h
 
 typedef struct {
     mini_app_t* p_app;
