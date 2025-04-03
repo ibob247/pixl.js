@@ -1,58 +1,33 @@
-# NRF5 SDK bootloader Makefile for Pixl.js
+# Bootloader Makefile for Pixl.js
+APP_NAME := bootloader
 
-TARGET = bootloader
-BOARD = pixljs
-TEMPLATE_PATH = ../../components/toolchain/gcc
-PROJ_DIR = .
+SDK_ROOT := ../../nRF5_SDK_17.1.0_ddde560
+TEMPLATE_PATH := $(SDK_ROOT)/components/toolchain/gcc
+MAKEFILE_NAME := Makefile
+MAKEFILE_COMMON := $(TEMPLATE_PATH)/Makefile.common
 
-# Source files common to all targets
-C_SOURCE_FILES += \
-  $(PROJ_DIR)/main.c \
-  $(PROJ_DIR)/lcd_comm.c \
-  $(PROJ_DIR)/lcd_drv.c \
-  $(PROJ_DIR)/dfu_public_key.c \
-  $(PROJ_DIR)/nrf_bootloader.c \
-  $(PROJ_DIR)/nrf_bootloader_app_start.c \
-  $(PROJ_DIR)/nrf_bootloader_app_start_final.c \
-  $(PROJ_DIR)/nrf_bootloader_dfu_timers.c \
-  $(PROJ_DIR)/nrf_bootloader_fw_activation.c \
-  $(PROJ_DIR)/nrf_bootloader_info.c \
-  $(PROJ_DIR)/nrf_bootloader_wdt.c \
-  $(PROJ_DIR)/nrf_dfu.c \
-  $(PROJ_DIR)/nrf_dfu_ble.c \
-  $(PROJ_DIR)/nrf_dfu_flash.c \
-  $(PROJ_DIR)/nrf_dfu_handling_error.c \
-  $(PROJ_DIR)/nrf_dfu_mbr.c \
-  $(PROJ_DIR)/nrf_dfu_req_handler.c \
-  $(PROJ_DIR)/nrf_dfu_settings.c \
-  $(PROJ_DIR)/nrf_dfu_settings_svci.c \
-  $(PROJ_DIR)/nrf_dfu_svci.c \
-  $(PROJ_DIR)/nrf_dfu_svci_handler.c \
-  $(PROJ_DIR)/nrf_dfu_transport.c \
-  $(PROJ_DIR)/nrf_dfu_utils.c \
-  $(PROJ_DIR)/nrf_dfu_validation.c \
-  $(PROJ_DIR)/nrf_dfu_ver_validation.c \
-  $(PROJ_DIR)/nrf_sdh.c \
-  $(PROJ_DIR)/nrf_sdh_ble.c \
-  $(PROJ_DIR)/nrf_sdh_soc.c \
-  $(PROJ_DIR)/nrf_svc_handler.c \
-  $(PROJ_DIR)/pb_common.c \
-  $(PROJ_DIR)/pb_decode.c \
-  $(PROJ_DIR)/dfu-cc.pb.c \
-  $(PROJ_DIR)/oberon_backend_chacha_poly_aead.c \
-  $(PROJ_DIR)/oberon_backend_ecc.c \
-  $(PROJ_DIR)/oberon_backend_ecdh.c \
-  $(PROJ_DIR)/oberon_backend_ecdsa.c \
-  $(PROJ_DIR)/oberon_backend_eddsa.c \
-  $(PROJ_DIR)/oberon_backend_hash.c \
-  $(PROJ_DIR)/oberon_backend_hmac.c \
-  $(PROJ_DIR)/nrf_sw_backend_hash.c
+PROJECT_DIR := .
+BUILD_DIR := ../_build/$(APP_NAME)
 
-# Include paths common to all targets
-INC_PATHS += -I$(PROJ_DIR)
+SRC_FILES := \
+  main.c \
+  lcd_comm.c \
+  lcd_drv.c \
+  dfu_public_key.c \
+  $(wildcard $(SDK_ROOT)/components/**/*.c)
 
-# C flags common to all targets
-CFLAGS += -DBOARD_$(BOARD)
+INC_PATHS := \
+  -I. \
+  -I$(SDK_ROOT)/components \
+  -I$(SDK_ROOT)/components/libraries/bootloader \
+  -I$(SDK_ROOT)/components/libraries/util \
+  -I$(SDK_ROOT)/components/libraries/log \
+  -I$(SDK_ROOT)/modules/nrfx/mdk \
+  -I$(SDK_ROOT)/components/toolchain/cmsis/include \
+  -I$(SDK_ROOT)/components/drivers_nrf/nrf_soc_nosd \
+  -Isrc
 
-# Use relative path to Makefile.common
-include ../components/toolchain/gcc/Makefile.common
+CFLAGS += $(INC_PATHS)
+
+# Include Nordic SDK build rules
+include $(MAKEFILE_COMMON)
