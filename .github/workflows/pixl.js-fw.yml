@@ -20,6 +20,9 @@ jobs:
     - name: Set up build environment
       run: sudo apt-get update && sudo apt-get install -y make zip
 
+    - name: Debug - Find Makefile.common
+      run: find . -name Makefile.common
+
     - name: Build firmware
       run: cd fw && make all RELEASE=1 APP_VERSION=${{ env.APP_VERSION }} BOARD=OLED
 
