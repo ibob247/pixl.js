@@ -2,25 +2,19 @@
 #ifndef CACHE_H
 #define CACHE_H
 
-#include "ntag_def.h"
-#include <stdbool.h>
 #include <stdint.h>
+#include <stdbool.h>
+#include "ntag_def.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
+// Define the retain data structure
 typedef struct {
-    ntag_t ntag;
-    int id;
+    uint32_t id;
     bool enabled;
-    uint8_t retain_data[64]; // Placeholder size; adjust as needed
-} mod_cache_t;
+    uint8_t retain_data[128]; // Adjust size as needed for retainable app state
+    ntag_t ntag;
+} cache_data_t;
 
-mod_cache_t* mod_cache_get_data(void);
-
-#ifdef __cplusplus
-}
-#endif
+// Function to get access to the cache
+cache_data_t* cache_get_data(void);
 
 #endif // CACHE_H
