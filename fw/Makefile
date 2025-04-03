@@ -1,30 +1,33 @@
-# Root Makefile for firmware build system
-
+BOARD ?= LCD
 APP_VERSION ?= dev
-BOARD ?= OLED
+RELEASE ?= 0
 
-APP_DIR := application
-BOOTLOADER_DIR := bootloader
 BUILD_DIR := _build
+BUILD_TARGET := pixljs
+BUILD_OUTPUT := $(BUILD_DIR)/$(BUILD_TARGET).hex
+ALL_OUTPUT := $(BUILD_DIR)/$(BUILD_TARGET)_all.hex
+OTA_ZIP := $(BUILD_DIR)/pixjs_ota_v$(APP_VERSION).zip
 
-.PHONY: all app bootloader clean ota
+.PHONY: all firmware ota full clean
 
-all: bootloader app
+all:
+	@echo "=== Building firmware for $(BOARD) ==="
+	$(MAKE) -C bootloader
+	$(MAKE) -C application BOARD=$(BOARD) RELEASE=$(RELEASE) APP_VERSION=$(APP_VERSION)
 
-bootloader:
-	$(MAKE) -C $(BOOTLOADER_DIR) RELEASE=1 APP_VERSION=$(APP_VERSION) BOARD=$(BOARD)
+firmware:
+	@echo "=== Copying firmware hex to $(BUILD_OUTPUT) ==="
+	cp $(BUILD_DIR)/$(BUILD_TARGET)_$(BOARD).hex $(BUILD_OUTPUT)
 
-app:
-	$(MAKE) -C $(APP_DIR) RELEASE=1 APP_VERSION=$(APP_VERSION) BOARD=$(BOARD)
-
-# Add src/ to include paths globally (in case some headers rely on it)
-export CFLAGS += -Isrc
-
-# Optional OTA step (customize as needed)
 ota:
-	@echo "Packaging OTA update... (customize this rule if needed)"
+	@echo "=== Packaging OTA firmware ==="
+	@mkdir -p $(BUILD_DIR)
+	zip -j -6 $(OTA_ZIP) $(BUILD_OUTPUT)
+
+full: all firmware ota
 
 clean:
-	$(MAKE) -C $(BOOTLOADER_DIR) clean
-	$(MAKE) -C $(APP_DIR) clean
+	@echo "=== Cleaning all builds ==="
+	$(MAKE) -C bootloader clean
+	$(MAKE) -C application clean
 	rm -rf $(BUILD_DIR)
