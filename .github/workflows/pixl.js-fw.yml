@@ -1,64 +1,44 @@
-name: pixl.js-fw
+name: Build Pixl.js Firmware
 
 on:
   push:
-    branches: [ "develop"]
-    tags:  ["*"]
+    branches: [ main ]
   pull_request:
-    types: ["opened"]
-    branches: ["develop"]
-  workflow_dispatch:
+    branches: [ main ]
 
 jobs:
   build:
-    strategy:
-      matrix:
-        board: ["LCD", "OLED"]
     runs-on: ubuntu-latest
-    container: solosky/nrf52-sdk:latest
+
+    env:
+      APP_VERSION: ${{ github.run_number }}
+
     steps:
-    - uses: actions/checkout@v3
-      with:
-        submodules: 'true'
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-    - name: Change Owner of Container Working Directory
-      run: chown root:root .
+    - name: Set up build environment
+      run: sudo apt-get update && sudo apt-get install -y make zip
 
-    - name: build firmware
-      run: cd fw && make all RELEASE=1 APP_VERSION=$GITHUB_RUN_NUMBER BOARD=${{matrix.board}}
+    - name: Build firmware
+      run: cd fw && make all RELEASE=1 APP_VERSION=${{ env.APP_VERSION }} BOARD=OLED
 
-    - name: upload bootloader
+    - name: Package OTA firmware
+      run: cd fw && make ota APP_VERSION=${{ env.APP_VERSION }} BOARD=OLED
+
+    - name: List build directory
+      run: ls -alh fw/_build/
+
+    - name: Upload OTA artifact
       uses: actions/upload-artifact@v4
       with:
-        name: pixljs_fw_${{ matrix.board }}_bootloader
-        path: fw/_build/bootloader.hex
+        name: pixljs_fw_OLED_ota
+        path: fw/_build/pixjs_ota_v${{ env.APP_VERSION }}.zip
+        if-no-files-found: error
 
-    - name: upload firmware
+    - name: Upload HEX artifact (optional)
       uses: actions/upload-artifact@v4
       with:
-        name: pixljs_fw_${{ matrix.board }}_firmware
+        name: pixljs_fw_OLED_hex
         path: fw/_build/pixljs.hex
-
-    - name: upload all
-      uses: actions/upload-artifact@v4
-      with:
-        name: pixljs_fw_${{ matrix.board }}_all
-        path: fw/_build/pixljs_all.hex
-
-    - name: upload ota 
-      uses: actions/upload-artifact@v4
-      with:
-        name: pixljs_fw_${{ matrix.board }}_ota
-        path: fw/_build/pixjs_ota_v${{ github.run_number }}.zip
-
-    - name: upload fw update script 
-      uses: actions/upload-artifact@v4
-      with:
-        name: pixljs_fw_${{ matrix.board }}_update_script
-        path: fw/scripts/fw_update.bat
-
-    - name: upload fw readme file 
-      uses: actions/upload-artifact@v4
-      with:
-        name: pixljs_fw_${{ matrix.board }}_readme
-        path: fw/docs/fw_readme.txt
+        if-no-files-found: warn
