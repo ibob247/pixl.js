@@ -1,9 +1,10 @@
-#ifndef AMIIBOLINK_SCENE_MAIN_H
-#define AMIIBOLINK_SCENE_MAIN_H
+#ifndef AMIIBOLINK_SCENE_H
+#define AMIIBOLINK_SCENE_H
 
-#include "ble_amiibolink.h"
 #include "scene_manager.h"
 
-scene_t amiibolink_scene_main;
+// Declare all Amiibo Link scenes
+extern scene_t amiibolink_scene;
+extern scene_t amiibolink_scene_main;
 
-#endif // AMIIBOLINK_SCENE_MAIN_H
+#endif // AMIIBOLINK_SCENE_H
