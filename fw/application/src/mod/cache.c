@@ -2,8 +2,13 @@
 #include "cache.h"
 #include <string.h>
 
-static mod_cache_t g_cache_data;
+static cache_data_t g_cache_data = {
+    .id = 0,
+    .enabled = false,
+    .retain_data = {0},
+    .ntag = {0}
+};
 
-mod_cache_t* cache_get_data(void) {
+cache_data_t* cache_get_data(void) {
     return &g_cache_data;
 }
