@@ -1,9 +1,19 @@
-#ifndef AMIIBOLINK_SCENE_MAIN_H
-#define AMIIBOLINK_SCENE_MAIN_H
+#ifndef AMIIBOLINK_SCENE_H
+#define AMIIBOLINK_SCENE_H
 
-#include "ble_amiibolink.h"
-#include "scene_manager.h"
+#include "mui_scene_dispatcher.h"
 
-scene_t amiibolink_scene_main;
+// Generate scene id and total number
+#define ADD_SCENE(prefix, name, id) AMIIBOLINK_SCENE_##id,
+typedef enum {
+#include "amiibolink_scene_config.h"
+    AMIIBOLINK_SCENE_MAX,
+} ble_scene_id_t;
+#undef ADD_SCENE
 
-#endif // AMIIBOLINK_SCENE_MAIN_H
+extern const mui_scene_t amiibolink_scene_defines[];
+
+
+
+
+#endif 
